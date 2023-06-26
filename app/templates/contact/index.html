@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSERT</title>
+</head>
+<body>
+    {% if not update %}
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>nama</th>
+                    <th>NOHP</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact[0] }}</td>
+                        <td>{{ contact[1] }}</td>
+                        <td>{{ contact[2] }}</td>
+                        <td>
+                            <a href="/contact/update/{{ contact[0] }}">update</a>
+                            <a href="/contact/delete/{{ contact[0] }}">delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="/contact" method="post">
+            <input type="text" name="nama" placeholder="NAMA" required>
+            <input type="text" name="nohp" placeholder="NOHP" required>
+            <button>Submit</button>
+        </form>
+    {% else %}
+        <form action="/contact/update/{{ contact[0] }}" method="post">
+            <input type="text" name="nama" placeholder="NAMA" value="{{ contact[1] }}" required>
+            <input type="text" name="nohp" placeholder="NOHP" value="{{ contact[2] }}" required>
+            <button>Submit</button>
+        </form>
+    {% endif %}
+</body>
+</html>

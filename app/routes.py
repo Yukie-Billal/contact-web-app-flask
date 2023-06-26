@@ -1,0 +1,44 @@
+from flask import render_template, request, redirect, url_for
+from . import app
+from . import models
+
+
+@app.route('/')
+def index() :
+    return 'index'
+
+@app.route('/hello/<name>')
+def hello(name) :
+    return f'<h1>Hello {name}</h1>'
+
+
+@app.route('/create')
+def create() :
+    models.contact.create_table()
+    return 'created'
+
+@app.route('/contact', methods=['GET','POST'])
+def contact() :
+    if request.method == "POST" :
+        models.contact.insert(request.form["nama"], request.form["nohp"])
+        return redirect('/contact')
+    
+    contacts = models.contact.getContact()
+    return render_template('contact/index.html', contacts=contacts, update=False)
+
+@app.route('/contact/update/<int:id>', methods=['GET',"POST"])
+def contact_update(id) :
+    if request.method == "POST" :
+        form = request.form
+        nama = form["nama"]
+        nohp = form["nohp"]
+        models.contact.update(id,nama,nohp)
+        return redirect('/contact')
+    
+    contact = models.contact.getContactId(id)
+    return render_template('contact/index.html', update=True, contact=contact)
+
+@app.route('/contact/delete/<int:id>', methods=['GET',"POST"])
+def contact_delete(id) :
+    models.contact.destroy(id)
+    return redirect('/contact')
