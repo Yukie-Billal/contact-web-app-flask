@@ -3,44 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSERT</title>
+    <title>Contact - index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
-<body>
-    {% if not update %}
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>nama</th>
-                    <th>NOHP</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for contact in contacts %}
-                    <tr>
-                        <td>{{ contact[0] }}</td>
-                        <td>{{ contact[1] }}</td>
-                        <td>{{ contact[2] }}</td>
-                        <td>
-                            <a href="/contact/update/{{ contact[0] }}">update</a>
-                            <a href="/contact/delete/{{ contact[0] }}">delete</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <form action="/contact" method="post">
-            <input type="text" name="nama" placeholder="NAMA" required>
-            <input type="text" name="nohp" placeholder="NOHP" required>
-            <button>Submit</button>
-        </form>
-    {% else %}
-        <form action="/contact/update/{{ contact[0] }}" method="post">
-            <input type="text" name="nama" placeholder="NAMA" value="{{ contact[1] }}" required>
-            <input type="text" name="nohp" placeholder="NOHP" value="{{ contact[2] }}" required>
-            <button>Submit</button>
-        </form>
-    {% endif %}
+<body class="bg-slate-100">
+    <div class="container mx-auto px-2">
+        <h1 class="text-3xl font-bold text-neutral-900 text-center py-3 mb-5">
+            {{ title }}
+        </h1>
+        <div class="flex items-center justify-center flex-col">
+            {% if not update %}
+                <div class="bg-white py-3 px-3 rounded-md shadow-md mb-7">
+                    <table class="table border-2">
+                        <thead>
+                            <tr class="h-10">
+                                <th class="w-12 border-2">No</th>
+                                <th class="w-56 border-2">Nama</th>
+                                <th class="w-56 border-2">No handphone</th>
+                                <th class="w-44 border-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contact in contacts %}
+                                <tr class="h-10">
+                                    <td class="border-2 text-center">{{ contact[0] }}</td>
+                                    <td class="border-2 ps-2">{{ contact[1] }}</td>
+                                    <td class="border-2 ps-2">{{ contact[2] }}</td>
+                                    <td class="border-2 text-center">
+                                        <a class="bg-green-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-green-600 transition-all" href="/contact/update/{{ contact[0] }}">update</a>
+                                        <a class="bg-red-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-red-600 transition-all cursor-pointer" onclick="swal('warning', 'Contact Akan dihapus permanen !', '{{ contact[0] }}')">delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            <div class="b"> 
+                {% if not update %}
+                    <form action="/contact" method="post">
+                        <input type="text" name="nama" placeholder="Masukkan Nama" required class="py-2 px-3 rounded-sm border border-gray-300 outline-none">
+                        <input type="text" name="nohp" placeholder="08130192831" required class="py-2 px-3 rounded-sm border border-gray-300 outline-none">
+                        <button class="py-2 px-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all">Tambah</button>
+                    </form>
+                    {% else %}
+                    <form action="/contact/update/{{ contact[0] }}" method="post">
+                        <input type="text" name="nama" placeholder="NAMA" value="{{ contact[1] }}" required class="py-2 px-3 rounded-sm border border-gray-300 outline-none">
+                        <input type="text" name="nohp" placeholder="NOHP" value="{{ contact[2] }}" required class="py-2 px-3 rounded-sm border border-gray-300 outline-none">
+                        <button class="py-2 px-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all">Simpan</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function swal(type,message, id) {
+            Swal.fire({
+                title: 'Yakin?',
+                text: "Contact tidak bisa dikembalikan !",
+                icon: type,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    top.location = `/contact/delete/${id}`
+                }
+            })
+        }
+    </script>
 </body>
 </html>

@@ -24,7 +24,7 @@ def contact() :
         return redirect('/contact')
     
     contacts = models.contact.getContact()
-    return render_template('contact/index.html', contacts=contacts, update=False)
+    return render_template('contact/index.html', contacts=contacts, update=False, title="Halaman Contact")
 
 @app.route('/contact/update/<int:id>', methods=['GET',"POST"])
 def contact_update(id) :
@@ -36,9 +36,12 @@ def contact_update(id) :
         return redirect('/contact')
     
     contact = models.contact.getContactId(id)
-    return render_template('contact/index.html', update=True, contact=contact)
+    return render_template('contact/index.html', update=True, contact=contact, title="Ubah Contact")
 
 @app.route('/contact/delete/<int:id>', methods=['GET',"POST"])
 def contact_delete(id) :
     models.contact.destroy(id)
     return redirect('/contact')
+
+# with app.request_context() :
+#     url_for('static', filename='css/app.css')
