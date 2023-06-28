@@ -5,14 +5,9 @@ from . import models
 
 @app.route('/')
 def index() :
-    return 'index'
+    return render_template('index.html')
 
-@app.route('/hello/<name>')
-def hello(name) :
-    return f'<h1>Hello {name}</h1>'
-
-
-@app.route('/create')
+@app.route('/create/contact')
 def create() :
     models.contact.create_table()
     return 'created'
@@ -42,6 +37,3 @@ def contact_update(id) :
 def contact_delete(id) :
     models.contact.destroy(id)
     return redirect('/contact')
-
-# with app.request_context() :
-#     url_for('static', filename='css/app.css')
